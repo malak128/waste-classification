@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Waste Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .container {
+            max-width: 600px;   /* Shrink overall width */
+            margin: 20px auto;  /* Center page */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        img.result-img {
+            max-width: 300px;   /* Smaller result image */
+            height: auto;
+            display: block;
+            margin: 10px auto;  /* Centered */
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script>
+        function toggleInputs() {
+            const modelSelect = document.getElementById('modelSelect').value;
+            const imageDiv = document.getElementById('imageDiv');
+            const ganDiv = document.getElementById('ganDiv');
+            const textDiv = document.getElementById('textDiv');
+
+            if (["cnn_model","resnet_model","autoencoder","multimodal_model","yolo"].includes(modelSelect)) {
+                imageDiv.style.display = 'block';
+            } else {
+                imageDiv.style.display = 'none';
+            }
+
+            if (modelSelect === 'gan') {
+                ganDiv.style.display = 'block';
+            } else {
+                ganDiv.style.display = 'none';
+            }
+
+            if (modelSelect === 'multimodal_model') {
+                textDiv.style.display = 'block';
+            } else {
+                textDiv.style.display = 'none';
+            }
+        }
+        window.onload = toggleInputs;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Waste Classification</h1>
+
+        <form action="{{ url_for('predict_file') }}" method="POST" enctype="multipart/form-data">
+            <label for="modelSelect">Choose Model:</label>
+            <select name="model" id="modelSelect" onchange="toggleInputs()">
+                <option value="">--Select a Model--</option>
+                <option value="cnn_model" {% if selected_model == "cnn_model" %}selected{% endif %}>CNN Model</option>
+                <option value="resnet_model" {% if selected_model == "resnet_model" %}selected{% endif %}>ResNet Model</option>
+                <option value="autoencoder" {% if selected_model == "autoencoder" %}selected{% endif %}>Autoencoder</option>
+                <option value="multimodal_model" {% if selected_model == "multimodal_model" %}selected{% endif %}>Multimodal Model</option>
+                <option value="yolo" {% if selected_model == "yolo" %}selected{% endif %}>YOLO Model</option>
+                <option value="gan" {% if selected_model == "gan" %}selected{% endif %}>GAN Model</option>
+            </select>
+
+            <div id="imageDiv" style="display:none;">
+                <label for="file">Select Image:</label>
+                <input type="file" name="file" id="file" accept="image/*">
+            </div>
+
+            <div id="textDiv" style="display:none;">
+                <label for="text_input">Enter Description (optional):</label>
+                <input type="text" name="text_input" id="text_input" placeholder="e.g., plastic bottle">
+            </div>
+
+            <div id="ganDiv" style="display:none;">
+                <label for="gan_label">Select GAN Label:</label>
+                <select name="gan_label" id="gan_label">
+                    <option value="">--Choose Label--</option>
+                    <option value="cardboard">Cardboard</option>
+                    <option value="glass">Glass</option>
+                    <option value="metal">Metal</option>
+                    <option value="paper">Paper</option>
+                    <option value="plastic">Plastic</option>
+                    <option value="trash">Trash</option>
+                </select>
+            </div>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+            <div class="result">
+                <h2>Prediction:</h2>
+                <p>{{ prediction }}</p>
+                {% if filename %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ filename) }}" 
+                         alt="Uploaded Image" class="result-img">
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

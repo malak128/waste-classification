@@ -1,0 +1,97 @@
+/* ----------------- Fonts ----------------- */
+.font-lora { font-family: 'Lora', serif; }
+
+/* Center the page content */
+body {
+    font-family: Arial, serif;
+    text-align: center;   /* centers h1, p, and inline elements */
+    margin: 0;
+    padding: 0;
+}
+
+/* Style and center the title */
+h1 {
+    margin-top: 20px;
+    font-size: 2.5em;
+    color: #3E2F1C;
+}
+
+/* Keep prediction results centered */
+.prediction {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color:#3E2F1C;
+}
+
+
+/* ----------------- General Styling ----------------- */
+body {
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* center vertically */
+    min-height: 100vh;       /* full viewport height */
+    background: 
+        url('{{ url_for("static", filename="images/leaves.png") }}') repeat, /* subtle leaf pattern */
+        linear-gradient(135deg, #EDE6DB, #D6C7A1); /* earthy gradient */
+    background-size: 150px, cover;
+    color: #3E2F1C; /* Dark brown text */
+    margin: 0;
+    padding: 0;
+    animation: gradientShift 20s ease infinite;
+}
+
+/* ----------------- Gradient Animation ----------------- */
+@keyframes gradientShift {
+    0% { background-position: 0 0, 0 0; }
+    50% { background-position: 100px 100px, 0 0; }
+    100% { background-position: 0 0, 0 0; }
+}
+
+.container {
+    width: 600px;
+    padding: 30px;
+    background-color: rgba(245, 240, 230, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+/* ----------------- Form Styling ----------------- */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form select, form input[type="file"], form input[type="text"], form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #C2B59B;
+    font-size: 16px;
+}
+
+form button {
+    background-color: #8C6B4F; /* Earthy brown button */
+    color: #F5F0E6; /* Light text */
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background-color: #7A5A3E;
+    transform: translateY(-2px);
+}
+
+/* ----------------- Result Styling ----------------- */
+.result {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.result img {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+}
