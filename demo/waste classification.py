@@ -11,22 +11,22 @@ import glob
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
 
-# -------------------------
+
 # Flask App
-# -------------------------
+
 app = Flask(__name__)
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# -------------------------
+
 # TrashNet Classes
-# -------------------------
+
 class_names = ["cardboard", "glass", "metal", "paper", "plastic", "trash"]
 
-# -------------------------
+
 # Models Folder & Drive Link
-# -------------------------
+
 MODEL_FOLDER = "saved_models"
 DRIVE_FOLDER_LINK = "https://drive.google.com/drive/folders/17NT5-jTKiYdlFrP62o4Z2v1tjYMgjOJx?usp=sharing"
 os.makedirs(MODEL_FOLDER, exist_ok=True)
@@ -39,9 +39,8 @@ if not os.listdir(MODEL_FOLDER):
 else:
     print("Models already exist, skipping download.")
 
-# -------------------------
 # Load TensorFlow/Keras Models
-# -------------------------
+
 print("Loading TensorFlow/Keras models...")
 
 autoencoder = tf.keras.models.load_model(os.path.join(MODEL_FOLDER, "denoising_autoencoder"))
@@ -53,18 +52,17 @@ resnet_model = tf.keras.models.load_model(os.path.join(MODEL_FOLDER, "resnet_mod
 generator_model = tf.keras.models.load_model(os.path.join(MODEL_FOLDER, "generator_model.h5"))
 discriminator_model = tf.keras.models.load_model(os.path.join(MODEL_FOLDER, "discriminator_model.h5"))
 
-print("✅ TensorFlow/Keras models loaded!")
+print("TensorFlow/Keras models loaded!")
 
-# -------------------------
 # Load YOLO Models Dynamically
-# -------------------------
+
 chunk_folders = sorted(glob.glob(os.path.join(MODEL_FOLDER, "chunk", "chunk*")))
 yolo_chunks = [YOLO(os.path.join(folder, "best.pt")) for folder in chunk_folders]
-print(f"✅ Loaded {len(yolo_chunks)} YOLO chunk models!")
+print(f"Loaded {len(yolo_chunks)} YOLO chunk models!")
 
-# -------------------------
+
 # Helper Functions
-# -------------------------
+
 def preprocess_image(img_path, model_name=None):
     """Preprocess image correctly for each model"""
     from PIL import Image
@@ -153,9 +151,9 @@ def get_prediction(file_path, model_name, text_input_value=None, gan_label=None)
         prediction = "Unknown model"
     return prediction, filename
 
-# -------------------------
+
 # Routes
-# -------------------------
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -177,8 +175,9 @@ def predict_file():
     prediction, gen_filename = get_prediction(file_path, selected_model, text_input_value, gan_label)
     return render_template('index.html', prediction=prediction, filename=filename or gen_filename)
 
-# -------------------------
+
 # Run App
-# -------------------------
+
 if __name__ == '__main__':
     app.run(debug=True)
+
