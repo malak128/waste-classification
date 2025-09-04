@@ -1,0 +1,14 @@
+numpy
+tensorflow
+tensorflow-addons
+tensorflow-hub
+scikit-learn
+matplotlib
+seaborn
+opencv-python
+kagglehub
+roboflow
+ultralytics
+flask
+werkzeug
+pillow
